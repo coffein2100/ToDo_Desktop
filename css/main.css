@@ -21,6 +21,25 @@ body {
 .task-title {
   font-weight: 400;
   padding-top: 5px;
+  word-break: break-all;
+  text-align: center;
+  line-height:14px;
+}
+.task-titlebutton {
+  margin:0 auto;
+  font-weight: 400;
+  padding-top: 5px;
+  word-break: break-all;
+  text-align: center;
+  line-height:14px;
+}
+.Tabletask-title {
+  font-weight: 700;
+  padding-top: 5px;
+  word-break: break-all;
+  text-align: center;
+  line-height:14px;
+  vertical-align: top;
 }
 .gray {
   color: #BDBDBD;
@@ -63,9 +82,9 @@ body {
     transition: opacity 0.2s ease-in;
     opacity: 0.5;
 
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */ */
 }
 
 .btn-action:hover {

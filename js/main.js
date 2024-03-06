@@ -1,40 +1,60 @@
 //Находим элементы на странице
 const form = document.querySelector('#form');
+const form2 = document.querySelector('#form2');
 const taskInput = document.querySelector('#taskInput');
+const taskListTable = document.querySelector('#tasksListTable');
 const taskList = document.querySelector('#tasksList');
 const emptyList = document.querySelector('#emptyList');
+const taskCategoryNew = document.querySelector('#taskInputCategory'); // добавляем новую категорию
+const taskCategorySelect = document.querySelector('#taskCategory');//выбранная категория
+const taskCategorySelectDelete = document.querySelector('#taskCategoryDelete');//выбранная категория для удаления
+const deadLine = document.querySelector('#taskInputdate');
+const formDeleteCategory = document.querySelector('#formDeleteCategory');
 
 let tasks = [];
+let tasksCategory = [];
 
 if(localStorage.getItem('tasks')){
     tasks = JSON.parse(localStorage.getItem('tasks'));
     tasks.forEach((task) => renderTask (task));
 }
-
-
+if(localStorage.getItem('tasksCategory')){
+    tasksCategory = JSON.parse(localStorage.getItem('tasksCategory'));
+    tasksCategory.forEach((tasksCat) => renderTaskCategory (tasksCat));
+}
 
 checkEmptyList();
 //добавление задачи
 form.addEventListener('submit', addTask);
+//добавление категории задачи
+form2.addEventListener('submit', createTaskCategory);
 
 //удаление задачи
 
-taskList.addEventListener('click', deleteTask);
+taskListTable.addEventListener('click', deleteTask);
+//удаление категории
+
+formDeleteCategory.addEventListener('submit', deleteCategory);
 
 //отмечаем задачу завершенной
 
-taskList.addEventListener('click', doneTask);
+taskListTable.addEventListener('click', doneTask);
 
 function addTask (event) {
     event.preventDefault(); //отменить перезагрузку страницы и отправку формы 
 
    //Считываем текст задачи из поля ввода  
    const taskText =  taskInput.value;
-   
+
+   const parse  = Date.parse(deadLine.value);
+   let taskend = new Date(parse).toLocaleDateString();
+   let taskCategory=taskCategorySelect.value;
    //описываем задачу в виде объекта
     const newTask = {
         id: Date.now(),
         text:taskText,
+        category: taskCategory,
+        endTime:taskend,
         status:false,
     };
     //добавляем задачу в массив
@@ -51,7 +71,7 @@ checkEmptyList();
 
 function deleteTask(event){
     if(event.target.dataset.action !== 'delete') return;
-        const parenNode = event.target.closest('.list-group-item');
+        const parenNode = event.target.closest('tr');
 
         //определяем id задачи
         const id = Number(parenNode.id);
@@ -65,7 +85,7 @@ function deleteTask(event){
 function doneTask (event){
   //Проверяем что клик был по кнопке завершить задачу  
     if (event.target.dataset.action === "done"){
-        const parentNode = event.target.closest('.list-group-item');
+        const parentNode = event.target.closest('tr');
 
         const id = parentNode.id;
 
@@ -73,8 +93,9 @@ function doneTask (event){
 
         task.status = !task.status;
         saveToLocalStorage();
-        const taskTitle = parentNode.querySelector('.task-title');
-        taskTitle.classList.toggle('task-title--done');
+        // const taskTitle = parentNode.querySelector('.task-title');
+        const taskTitle = parentNode;
+        taskTitle.classList.toggle('table-success');
     }
 }
 
@@ -94,25 +115,71 @@ function checkEmptyList() {
 function saveToLocalStorage() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
+function saveToLocalStorageCategory() {
+    localStorage.setItem('tasksCategory', JSON.stringify(tasksCategory));
+}
 
 function renderTask (task) {
-        //формируем CSS класс
-        const cssClass = task.status ? "task-title task-title--done" : "task-title";
-
-        //Формируем разметку для новой задачи
-         const taskHTML = `
-         <li id="${task.id}" class="list-group-item d-flex justify-content-between task-item">
-         <span class="${cssClass}">${task.text}</span>
-         <div class="task-item__buttons">
-             <button type="button" data-action="done" class="btn-action">
-                 <img src="./img/tick.svg" alt="Done" width="18" height="18">
-             </button>
-             <button type="button" data-action="delete" class="btn-action">
-                 <img src="./img/cross.svg" alt="Done" width="18" height="18">
-             </button>
-         </div>
-     </li>`;
-     
+    const taskHTML = `<tr class="" id="${task.id}">
+    <td class="task-title">${task.text}</td>
+    <td class="task-title">${task.category}</td>
+    <td class="task-title">${task.endTime}</td>
+    <td class="task-titlebutton">
+        <button type="button" data-action="done" class="btn-action">
+            <img src="./img/tick.svg" alt="Done" width="18" height="18">
+        </button>
+    </td>
+    <td class="task-titlebutton">
+        <button type="button" data-action="delete" class="btn-action">
+            <img src="./img/cross.svg" alt="Done" width="18" height="18">
+        </button>
+    </td>`;
      //Добавляем задачу на страницу
-     taskList.insertAdjacentHTML('beforeend', taskHTML);
+     taskListTable.insertAdjacentHTML('beforeend', taskHTML);
+}
+
+function createTaskCategory(event){
+    event.preventDefault();
+    const taskCategoryInput = taskCategoryNew.value;
+    let countcategoryname = 0;
+    let check = tasksCategory.forEach((Category)=> {
+       if (Category.text.toLowerCase() == taskCategoryInput.toLowerCase())
+       {countcategoryname = countcategoryname + 1;}
+    });
+    console.log(countcategoryname);
+
+    if (countcategoryname > 0 ) {
+        alert('Данная категория уже есть.\nПросьба ввести другое название категории')
+    } else {
+    //описываем категорию в виде объекта
+    const newCategory = {
+        id:Date.now(),
+        text:taskCategoryInput,
+    }
+    tasksCategory.push(newCategory);
+    saveToLocalStorageCategory();
+    taskCategoryNew.value='';
+    renderTaskCategory (newCategory);
+    }
+}
+
+function renderTaskCategory (tasksCat){
+    //Формируем разметку для категорий задач
+    const taskHTMLCategory = `<option value="${tasksCat.text}">${tasksCat.text}</option>`;
+    taskCategorySelect.insertAdjacentHTML('beforeend', taskHTMLCategory);
+    taskCategorySelectDelete.insertAdjacentHTML('beforeend', taskHTMLCategory);
+}
+
+function deleteCategory(event){
+    event.preventDefault();
+    const taskCategoryInputDelete = String(taskCategorySelectDelete.value);
+    console.log(taskCategoryInputDelete);
+    tasksCategory = tasksCategory.filter((tasksCat) => tasksCat.text !== taskCategoryInputDelete);
+    saveToLocalStorageCategory();   
+
+    let selectedIndex = taskCategorySelectDelete.options.selectedIndex;
+    // удаляем элемент 
+    taskCategorySelect.remove(selectedIndex);
+    taskCategorySelectDelete.remove(selectedIndex);
+
 }
