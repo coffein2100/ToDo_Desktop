@@ -10,6 +10,8 @@ const taskCategorySelect = document.querySelector('#taskCategory');//выбра�
 const taskCategorySelectDelete = document.querySelector('#taskCategoryDelete');//выбранная категория для удаления
 const deadLine = document.querySelector('#taskInputdate');
 const formDeleteCategory = document.querySelector('#formDeleteCategory');
+const listDone = document.querySelector('#tasksListTableDone');
+const listOnWork = document.querySelector('#tasksListTableOnWork');
 
 let tasks = [];
 let tasksCategory = [];
@@ -32,6 +34,8 @@ form2.addEventListener('submit', createTaskCategory);
 //удаление задачи
 
 taskListTable.addEventListener('click', deleteTask);
+listDone.addEventListener('click', deleteTask);
+listOnWork.addEventListener('click', deleteTask);
 //удаление категории
 
 formDeleteCategory.addEventListener('submit', deleteCategory);
@@ -39,6 +43,8 @@ formDeleteCategory.addEventListener('submit', deleteCategory);
 //отмечаем задачу завершенной
 
 taskListTable.addEventListener('click', doneTask);
+listDone.addEventListener('click', doneTask);
+listOnWork.addEventListener('click', doneTask);
 
 function addTask (event) {
     event.preventDefault(); //отменить перезагрузку страницы и отправку формы 
@@ -80,6 +86,7 @@ function deleteTask(event){
         saveToLocalStorage();
         parenNode.remove();
         checkEmptyList();
+        location.reload();
 }
 
 function doneTask (event){
@@ -96,10 +103,15 @@ function doneTask (event){
         // const taskTitle = parentNode.querySelector('.task-title');
         const taskTitle = parentNode;
         taskTitle.classList.toggle('table-success');
+        location.reload();
     }
 }
 
 function checkEmptyList() {
+    document.getElementById('taskAll').innerText = document.querySelectorAll('.task-titleName').length; // подсчет всех задач
+    document.getElementById('taskOnWork').innerText = document.querySelectorAll('.task-taskOnWork').length;
+    document.getElementById('taskComplete').innerText = document.querySelectorAll('.task-taskComplete').length;    
+    
     if (tasks.length == 0) {
         const emptyListHTML = `<li id="emptyList" class="list-group-item empty-list">
         <img src="./img/leaf.svg" alt="Empty" width="48" class="mt-3">
@@ -120,8 +132,10 @@ function saveToLocalStorageCategory() {
 }
 
 function renderTask (task) {
-    const taskHTML = `<tr class="" id="${task.id}">
-    <td class="task-title">${task.text}</td>
+    const cssClass = task.status ? "table-success" : "";
+
+    const taskHTML = `<tr class="${cssClass}" id="${task.id}">
+    <td class="task-titleName">${task.text}</td>
     <td class="task-title">${task.category}</td>
     <td class="task-title">${task.endTime}</td>
     <td class="task-titlebutton">
@@ -136,6 +150,42 @@ function renderTask (task) {
     </td>`;
      //Добавляем задачу на страницу
      taskListTable.insertAdjacentHTML('beforeend', taskHTML);
+
+    if (task.status === false) {
+        let taskHTMLOnWork = `<tr class="${cssClass}" id="${task.id}">
+    <td class="task-taskOnWork">${task.text}</td>
+    <td class="task-title">${task.category}</td>
+    <td class="task-title">${task.endTime}</td>
+    <td class="task-titlebutton">
+        <button type="button" data-action="done" class="btn-action">
+            <img src="./img/tick.svg" alt="Done" width="18" height="18">
+        </button>
+    </td>
+    <td class="task-titlebutton">
+        <button type="button" data-action="delete" class="btn-action">
+            <img src="./img/cross.svg" alt="Done" width="18" height="18">
+        </button>
+    </td>`;
+     //Добавляем задачу на страницу
+     listOnWork.insertAdjacentHTML('beforeend', taskHTMLOnWork);
+    } else {
+        let taskHTMLDone = `<tr class="${cssClass}" id="${task.id}">
+        <td class="task-taskComplete">${task.text}</td>
+        <td class="task-title">${task.category}</td>
+        <td class="task-title">${task.endTime}</td>
+        <td class="task-titlebutton">
+            <button type="button" data-action="done" class="btn-action">
+                <img src="./img/tick.svg" alt="Done" width="18" height="18">
+            </button>
+        </td>
+        <td class="task-titlebutton">
+            <button type="button" data-action="delete" class="btn-action">
+                <img src="./img/cross.svg" alt="Done" width="18" height="18">
+            </button>
+        </td>`;
+         //Добавляем задачу на страницу
+        listDone.insertAdjacentHTML('beforeend', taskHTMLDone);
+    }
 }
 
 function createTaskCategory(event){

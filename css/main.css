@@ -25,6 +25,30 @@ body {
   text-align: center;
   line-height:14px;
 }
+.task-titleName{
+  font-weight: 400;
+  padding-top: 5px;
+  word-break: break-all;
+  text-align: center;
+  line-height:14px;
+}
+
+.task-taskOnWork{
+  font-weight: 400;
+  padding-top: 5px;
+  word-break: break-all;
+  text-align: center;
+  line-height:14px;
+}
+.task-taskComplete {
+  font-weight: 400;
+  padding-top: 5px;
+  word-break: break-all;
+  text-align: center;
+  line-height:14px;
+}
+
+
 .task-titlebutton {
   margin:0 auto;
   font-weight: 400;
@@ -33,13 +57,15 @@ body {
   text-align: center;
   line-height:14px;
 }
+
 .Tabletask-title {
   font-weight: 700;
   padding-top: 5px;
   word-break: break-all;
   text-align: center;
-  line-height:14px;
+  line-height:150%;
   vertical-align: top;
+   
 }
 .gray {
   color: #BDBDBD;
@@ -113,4 +139,7 @@ body {
   /* bottom: 30px; */
   /* left: 0; */
   /* right: 0; */
+}
+table {
+  margin-bottom: 20px;
 }

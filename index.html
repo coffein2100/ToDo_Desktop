@@ -11,7 +11,7 @@
 </head>
 <body>
 
-	<div class="container">
+	<div class="container-sm">
 		<div class="display-4 mb-4">Список дел</div>
 		<div class="accordion accordion-flush mb-4" id="accordionFlushExample">
 			<div class="accordion-item">
@@ -98,7 +98,6 @@
 			  </div>
 		</div>
 
-		<div class="h4 mb-3">Список всех задач</div>
 		<div class="card mb-4">
 			<ul id="tasksList" class="list-group ">
 			</ul>
@@ -106,25 +105,74 @@
 		<!-- //List of tasks -->
 
 
-		<div class="card mb-4">
 
-
-		<table id="tasksListTable" class="table table-sm align-middle">
-			<thead>
-			  <tr class="table-light">
-				<th scope="col" class="Tabletask-title">Наименование задачи</th>
-				<th scope="col" class="Tabletask-title">Категория</th>
-				<th scope="col" class="Tabletask-title">Срок задачи</th>
-				<th scope="col" class="Tabletask-title">Отметка о выполнении</th>
-				<th scope="col" class="Tabletask-title">Удалить задачу</th>
-			  </tr>
-			</thead>
-			<tbody>
-
-			</tbody>
-		  </table>
-		</div>
 		<!-- List of tasks -->
+
+		<div class="h4 mb-3">Список задач в работе <span class="badge rounded-pill bg-warning text-dark" id="taskOnWork">Primary</span> </div>
+		<div class="card mb-5">
+
+
+			<table id="tasksListTableOnWork" class="table table-sm align-middle">
+				<thead>
+				  <tr class="table-light">
+					<th scope="col" class="Tabletask-title">Наименование задачи</th>
+					<th scope="col" class="Tabletask-title">Категория</th>
+					<th scope="col" class="Tabletask-title">Срок задачи</th>
+					<th scope="col" class="Tabletask-title">Отметка о выполнении</th>
+					<th scope="col" class="Tabletask-title">Удалить задачу</th>
+				  </tr>
+				</thead>
+				<tbody>
+	
+				</tbody>
+			  </table>
+			</div>
+
+			<div class="h4 mb-3"><span class="position-relative">Список всех задач
+				<span class="top-0  start-100 translate-middle badge rounded-pill bg-primary" id="taskAll">Primary
+					<span class="visually-hidden">unread messages</span>
+				</span> 
+			</span>
+			</div>
+
+			<div class="card mb-5">
+
+
+				<table id="tasksListTable" class="table table-sm align-middle">
+					<thead>
+					  <tr class="table-light">
+						<th scope="col" class="Tabletask-title">Наименование задачи</th>
+						<th scope="col" class="Tabletask-title">Категория</th>
+						<th scope="col" class="Tabletask-title">Срок задачи</th>
+						<th scope="col" class="Tabletask-title">Отметка о выполнении</th>
+						<th scope="col" class="Tabletask-title">Удалить задачу</th>
+					  </tr>
+					</thead>
+					<tbody>
+		
+					</tbody>
+				  </table>
+				</div>
+			
+		<div class="h4 mb-3">Список выполненных задач <span class="badge rounded-pill bg-success" id="taskComplete">Primary</span> </div>
+		<div class="card mb-5">
+
+
+			<table id="tasksListTableDone" class="table table-sm align-middle">
+				<thead>
+				  <tr class="table-light">
+					<th scope="col" class="Tabletask-title">Наименование задачи</th>
+					<th scope="col" class="Tabletask-title">Категория</th>
+					<th scope="col" class="Tabletask-title">Срок задачи</th>
+					<th scope="col" class="Tabletask-title">Отметка о выполнении</th>
+					<th scope="col" class="Tabletask-title">Удалить задачу</th>
+				  </tr>
+				</thead>
+				<tbody>
+	
+				</tbody>
+			  </table>
+			</div>
 
 	</div>
 	<script src="js/main.js"></script>
